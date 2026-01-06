@@ -1,0 +1,54 @@
+@page
+@model InventoryManager.Pages.CreateModel
+
+@{
+    ViewData["Title"] = "Добавить оборудование";
+}
+
+<h1>Добавить оборудование</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Equipment.SerialNumber" class="form-label">Серийный номер</label>
+                <input asp-for="Equipment.SerialNumber" class="form-control" />
+                <span asp-validation-for="Equipment.SerialNumber" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Equipment.Model" class="form-label">Модель</label>
+                <input asp-for="Equipment.Model" class="form-control" />
+                <span asp-validation-for="Equipment.Model" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Equipment.PurchaseDate" class="form-label">Дата покупки</label>
+                <input asp-for="Equipment.PurchaseDate" class="form-control" type="date" />
+                <span asp-validation-for="Equipment.PurchaseDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Equipment.WarrantyExpirationDate" class="form-label">Дата окончания гарантии</label>
+                <input asp-for="Equipment.WarrantyExpirationDate" class="form-control" type="date" />
+                <span asp-validation-for="Equipment.WarrantyExpirationDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="UploadFile" class="form-label">Скан документов (необязательно)</label>
+                <input asp-for="UploadFile" class="form-control" type="file" />
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Создать</button>
+                <a asp-page="Index" class="btn btn-secondary">К списку</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

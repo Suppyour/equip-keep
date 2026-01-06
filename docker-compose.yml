@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=inventory_db;Username=postgres;Password=postgres_password
+      - YandexCloud__StorageBucket=your-bucket-name
+      - YandexCloud__AccessKey=your-access-key
+      - YandexCloud__SecretKey=your-secret-key
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres_password
+      - POSTGRES_DB=inventory_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

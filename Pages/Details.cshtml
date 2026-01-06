@@ -1,0 +1,95 @@
+@page "{id:int}"
+@model InventoryManager.Pages.DetailsModel
+
+@{
+    ViewData["Title"] = "Детали оборудования";
+}
+
+<div>
+    <h4>Детали оборудования</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Модель</dt>
+        <dd class="col-sm-10">@Model.Equipment.Model</dd>
+
+        <dt class="col-sm-2">Серийный номер</dt>
+        <dd class="col-sm-10">@Model.Equipment.SerialNumber</dd>
+
+        <dt class="col-sm-2">Статус</dt>
+        <dd class="col-sm-10">
+            <!-- Simple status display or localized switch -->
+            @Model.Equipment.Status
+        </dd>
+
+        <dt class="col-sm-2">Текущий владелец</dt>
+        <dd class="col-sm-10">@(Model.Equipment.CurrentOwner?.FullName ?? "Склад")</dd>
+
+        <dt class="col-sm-2">Документ</dt>
+        <dd class="col-sm-10">
+            @if (!string.IsNullOrEmpty(Model.Equipment.DocumentUrl))
+            {
+                <a href="@Model.Equipment.DocumentUrl" target="_blank" class="btn btn-sm btn-outline-primary">Скачать документ</a>
+            }
+            else
+            {
+                <span>Нет документа</span>
+            }
+        </dd>
+    </dl>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h5>Передача оборудования</h5>
+        <form method="post" asp-page-handler="Transfer">
+            <!-- Ensure EquipmentId is passed correctly if needed, though route id usually suffices -->
+            <input type="hidden" name="id" value="@Model.Equipment.Id" />
+            
+            <div class="mb-3">
+                <label class="form-label">Новый владелец</label>
+                <!-- Matches public SelectList EmployeeList property -->
+                <select asp-for="NewOwnerId" asp-items="Model.EmployeeList" class="form-select">
+                    <option value="">-- Выберите сотрудника --</option>
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Комментарий</label>
+                 <!-- Matches public string TransferComment property -->
+                <input asp-for="TransferComment" class="form-control" placeholder="Причина перемещения" />
+            </div>
+
+            <button type="submit" class="btn btn-warning">Передать / Вернуть на склад</button>
+        </form>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h5>История перемещений</h5>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>От кого</th>
+                <th>Кому</th>
+                <th>Комментарий</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var history in Model.Equipment.History)
+            {
+                <tr>
+                    <!-- Matches public DateTime EventDate property -->
+                    <td>@history.EventDate.ToString("g")</td>
+                    <td>@(history.OldOwner?.FullName ?? "Склад")</td>
+                    <td>@(history.NewOwner?.FullName ?? "Склад")</td>
+                    <td>@history.Comment</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-3">
+    <a asp-page="./Index" class="btn btn-secondary">Назад к списку</a>
+</div>

@@ -1,0 +1,62 @@
+@page
+@model InventoryManager.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Список оборудования";
+}
+
+<h1>Список оборудования</h1>
+
+<form method="get" class="mb-3">
+    <div class="input-group">
+        <label class="input-group-text">Статус</label>
+        <select asp-for="FilterStatus" asp-items="Html.GetEnumSelectList<InventoryManager.Models.EquipmentStatus>()" class="form-select">
+            <option value="">Все</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Фильтр</button>
+    </div>
+</form>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Модель</th>
+            <th>Серийный номер</th>
+            <th>Статус</th>
+            <th>Текущий владелец</th>
+            <th>Гарантия до</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Equipment)
+        {
+            <tr>
+                <td>@item.Model</td>
+                <td>@item.SerialNumber</td>
+                <td>
+                    @switch (item.Status)
+                    {
+                        case InventoryManager.Models.EquipmentStatus.InStock:
+                            <span class="badge bg-success">На складе</span>
+                            break;
+                        case InventoryManager.Models.EquipmentStatus.Issued:
+                            <span class="badge bg-primary">Выдано</span>
+                            break;
+                        case InventoryManager.Models.EquipmentStatus.WrittenOff:
+                            <span class="badge bg-secondary">Списано</span>
+                            break;
+                        default:
+                            <span class="badge bg-light text-dark">@item.Status</span>
+                            break;
+                    }
+                </td>
+                <td>@(item.CurrentOwner?.FullName ?? "-")</td>
+                <td>@item.WarrantyExpirationDate.ToShortDateString()</td>
+                <td>
+                    <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Подробнее</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
