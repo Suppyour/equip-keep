@@ -1,6 +1,7 @@
 using InventoryManager.Data;
 using InventoryManager.Models;
 using InventoryManager.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManager.Pages
 {
+    [Authorize]
     public class DetailsModel : PageModel
     {
         private readonly InventoryDbContext _context;

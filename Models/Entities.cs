@@ -18,6 +18,8 @@ namespace InventoryManager.Models
         [Required]
         [MaxLength(200)]
         public string FullName { get; set; } = string.Empty;
+
+        public string? UserId { get; set; } // Link to AspNetUsers
         
         [MaxLength(100)]
         public string Department { get; set; } = string.Empty;

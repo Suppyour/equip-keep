@@ -1,11 +1,11 @@
-using InventoryManager.Data;
-using InventoryManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManager.Pages
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly InventoryDbContext _context;

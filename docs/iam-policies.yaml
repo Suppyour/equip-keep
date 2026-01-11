@@ -1,0 +1,13 @@
+bindings:
+  - role: editor
+    members:
+      - serviceAccount:inventory-app-sa
+  - role: storage.uploader
+    members:
+      - serviceAccount:inventory-app-sa
+  - role: postgresql.user
+    members:
+      - serviceAccount:inventory-app-sa
+  - role: serverless.functions.invoker
+    members:
+      - serviceAccount:inventory-app-sa

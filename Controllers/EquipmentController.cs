@@ -2,11 +2,13 @@ using InventoryManager.Data;
 using InventoryManager.Dtos;
 using InventoryManager.Models;
 using InventoryManager.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManager.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class EquipmentController : ControllerBase
@@ -43,6 +45,7 @@ namespace InventoryManager.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, DepartmentManager")]
         public async Task<IActionResult> Create([FromForm] CreateEquipmentDto dto)
         {
             string? docUrl = null;
@@ -70,6 +73,7 @@ namespace InventoryManager.Controllers
         }
 
         [HttpPost("{id}/transfer")]
+        [Authorize(Roles = "Admin, DepartmentManager")]
         public async Task<IActionResult> Transfer(int id, [FromBody] TransferDto dto)
         {
             await _inventoryService.TransferEquipmentAsync(id, dto.NewOwnerId, dto.Comment);

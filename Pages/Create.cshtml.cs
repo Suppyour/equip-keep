@@ -1,11 +1,13 @@
 using InventoryManager.Data;
 using InventoryManager.Models;
 using InventoryManager.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace InventoryManager.Pages
 {
+    [Authorize(Roles = "Admin, DepartmentManager")]
     public class CreateModel : PageModel
     {
         private readonly InventoryDbContext _context;

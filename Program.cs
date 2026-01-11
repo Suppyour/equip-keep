@@ -12,6 +12,18 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<InventoryDbContext>(options =>
     options.UseNpgsql(connectionString));
 
+builder.Services.AddIdentity<Microsoft.AspNetCore.Identity.IdentityUser, Microsoft.AspNetCore.Identity.IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<InventoryDbContext>()
+.AddDefaultTokenProviders();
+
 var storageOptions = builder.Configuration.GetSection("YandexCloud");
 builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<IAmazonS3>();
@@ -33,8 +45,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 app.MapRazorPages();
@@ -43,7 +59,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<InventoryDbContext>();
     db.Database.EnsureCreated();
-    DbInitializer.Initialize(db);
+    await DbInitializer.InitializeAsync(scope.ServiceProvider);
 }
 
 app.Run();
