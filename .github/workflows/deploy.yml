@@ -16,7 +16,7 @@ jobs:
           host: ${{ secrets.YC_VM_HOST }}
           username: ${{ secrets.YC_VM_USERNAME }}
           key: ${{ secrets.YC_VM_SSH_KEY }}
-          passphrase: ${{ secrets.YC_VM_SSH_PASSPHRASE }} # Optional, if your key has a passphrase
+          passphrase: ${{ secrets.YC_VM_SSH_PASSPHRASE }}
           script: |
             # Navigate to project directory (change this to your actual path)
             cd /home/${{ secrets.YC_VM_USERNAME }}/equip-keep
@@ -27,4 +27,4 @@ jobs:
             # Rebuild and restart containers
             # -d: Detached mode
             # --build: Build images before starting containers
-            docker-compose up -d --build
+            docker compose up -d --build
